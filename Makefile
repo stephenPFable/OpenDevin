@@ -29,6 +29,7 @@ endif
 	@$(MAKE) -s install-python-dependencies
 	@$(MAKE) -s install-frontend-dependencies
 	@$(MAKE) -s install-pre-commit-hooks
+	@$(MAKE) -s install-flutter-sdk
 	@$(MAKE) -s build-frontend
 	@echo "$(GREEN)Build completed successfully.$(RESET)"
 
@@ -169,6 +170,15 @@ install-frontend-dependencies:
 		npm run make-i18n
 	@echo "$(GREEN)Frontend dependencies installed successfully.$(RESET)"
 
+install-flutter-sdk:
+	@echo "$(YELLOW)Installing Flutter SDK...$(RESET)"
+	@flutter --version > /dev/null 2>&1 || { \
+		echo "$(BLUE)Downloading Flutter SDK...$(RESET)"; \
+		git clone https://github.com/flutter/flutter.git -b stable ~/flutter; \
+		export PATH="$PATH:~/flutter/bin"; \
+	}
+	@flutter doctor
+	@echo "$(GREEN)Flutter SDK installed successfully.$(RESET)"
 install-pre-commit-hooks:
 	@echo "$(YELLOW)Installing pre-commit hooks...$(RESET)"
 	@git config --unset-all core.hooksPath || true
